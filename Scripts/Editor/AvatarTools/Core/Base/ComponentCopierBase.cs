@@ -206,7 +206,7 @@ namespace Pumkin.AvatarTools2.Copiers
             foreach(var type_enabled in ComponentTypesAndEnabled)
                 if(type_enabled.Value)
                 {
-                    if((Settings as CopierSettingsContainerBase)?.removeAllBeforeCopying ?? false)
+                    if((Settings as CopierSettingsContainerBase)?.RemoveAllBeforeCopying ?? false)
                         RemoveAllBeforeCopying(target, type_enabled.Key);
                     DoCopyByType(target, objFrom, type_enabled.Key);
                 }
@@ -216,7 +216,7 @@ namespace Pumkin.AvatarTools2.Copiers
         protected virtual bool DoCopyByType(GameObject target, GameObject objFrom, Type componentType)
         {
             var set = Settings as CopierSettingsContainerBase;
-            bool createGameObjects = set?.createGameObjects ?? false;
+            bool createGameObjects = set?.CreateGameObjects ?? false;
 
             PropertyDefinitions propDefs = set != null ? set.Properties : null;
 
@@ -255,7 +255,7 @@ namespace Pumkin.AvatarTools2.Copiers
             var set = Settings as CopierSettingsContainerBase;
             bool onlyAllowOne = false;
             if(set != null)
-                onlyAllowOne = set.onlyAllowOneComponentOfType;
+                onlyAllowOne = set.OnlyAllowOneComponentOfType;
 
             ComponentUtility.CopyComponent(coFrom);
             if(existComps.Length == 0 || !onlyAllowOne)
@@ -280,7 +280,7 @@ namespace Pumkin.AvatarTools2.Copiers
         {
             var set = Settings as CopierSettingsContainerBase;
             Component compTo;
-            if(set && set.onlyAllowOneComponentOfType)
+            if(set && set.OnlyAllowOneComponentOfType)
                 compTo = transTo.gameObject.GetOrAddComponent(compFrom.GetType());
             else
                 compTo = transTo.gameObject.AddComponent(compFrom.GetType());

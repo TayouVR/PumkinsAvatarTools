@@ -10,19 +10,11 @@ namespace Pumkin.AvatarTools2.VRChat.Settings
     [CustomSettingsContainer(typeof(AvatarDescriptorCopier))]
     class AvatarDescriptorCopier_Settings : CopierSettingsContainerBase
     {
-        protected override bool ShowCreateGameObjects => false;
-        protected override bool ShowRemoveAll => true;
+        public override bool OnlyAllowOneComponentOfType => true;
 
-        new void Awake()
+        public override PropertyDefinitions Properties { get; } = new PropertyDefinitions(new Dictionary<Type, PropertyGroup[]>
         {
-            onlyAllowOneComponentOfType = true;
-        }
-
-        public override PropertyDefinitions Properties => _props;
-
-        PropertyDefinitions _props = new PropertyDefinitions(new Dictionary<Type, PropertyGroup[]>
-        {
-            { VRChatTypes.VRC_AvatarDescriptor, new PropertyGroup[]
+            { VRChatTypes.VRC_AvatarDescriptor, new[]
                 {
                     new PropertyGroup("Settings",
                         "Name",
@@ -50,7 +42,7 @@ namespace Pumkin.AvatarTools2.VRChat.Settings
                         "ViewPosition"),
                 }
             },
-            { VRChatTypes.PipelineManager, new PropertyGroup[]
+            { VRChatTypes.PipelineManager, new[]
               {
                 new PropertyGroup("Blueprint ID", "blueprintId")
               }

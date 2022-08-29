@@ -7,7 +7,7 @@ namespace Pumkin.AvatarTools2.UI
 {
     public static class Icons
     {
-        const string RESOURCE_FOLDER_SUFFIX = "Pumkin/Icons/";
+        const string ResourceFolderSuffix = "Pumkin/Icons/";
 
         public static Texture Settings { get; private set; }
         public static Texture Options { get; private set; }
@@ -26,12 +26,12 @@ namespace Pumkin.AvatarTools2.UI
         static Icons()
         {
             Default = EditorGUIUtility.IconContent("DefaultAsset Icon")?.image;
-            Settings = EditorGUIUtility.IconContent("Settings")?.image ?? Default;
-            Options = EditorGUIUtility.IconContent("LookDevPaneOption")?.image ?? Default;
+            Settings = EditorGUIUtility.IconContent("Settings")?.image ? EditorGUIUtility.IconContent("Settings")?.image : Default;
+            Options = EditorGUIUtility.IconContent("pane options")?.image ? EditorGUIUtility.IconContent("pane options")?.image : Default;
 
-            Add = EditorGUIUtility.IconContent("Toolbar Plus")?.image ?? Default;
-            Remove = EditorGUIUtility.IconContent("Toolbar Minus")?.image ?? Default;
-            RemoveAll = EditorGUIUtility.IconContent("vcs_delete")?.image ?? Default;
+            Add = EditorGUIUtility.IconContent("Toolbar Plus")?.image ? EditorGUIUtility.IconContent("Toolbar Plus")?.image : Default;
+            Remove = EditorGUIUtility.IconContent("Toolbar Minus")?.image ? EditorGUIUtility.IconContent("Toolbar Minus")?.image : Default;
+            RemoveAll = EditorGUIUtility.IconContent("d_clear")?.image ? EditorGUIUtility.IconContent("d_clear")?.image : Default;
 
             Bone = GetIconTexureFromReources("DynamicBone") ?? Default;
             BoneCollider = GetIconTexureFromReources("DynamicBoneCollider") ?? Default;
@@ -120,9 +120,9 @@ namespace Pumkin.AvatarTools2.UI
 
         static Texture GetIconTexureFromReources(string name)
         {
-            var tx = Resources.Load<Texture>(RESOURCE_FOLDER_SUFFIX + name + "-Icon");
+            var tx = Resources.Load<Texture>(ResourceFolderSuffix + name + "-Icon");
             if(tx == null)
-                tx = Resources.Load<Texture>(RESOURCE_FOLDER_SUFFIX + name);
+                tx = Resources.Load<Texture>(ResourceFolderSuffix + name);
             return tx;
         }
     }

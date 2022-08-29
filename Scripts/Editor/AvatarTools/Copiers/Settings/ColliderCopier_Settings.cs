@@ -25,5 +25,12 @@ namespace Pumkin.AvatarTools2.Copiers
 
         [DrawToggleLeft][TypeEnablerField(typeof(MeshCollider))]
         public bool meshColliders = true;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            CreateGameObjects = true;
+            RemoveAllBeforeCopying = false;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace Pumkin.AvatarTools2.Settings
     [Serializable]
     public class SettingsContainerBase : ScriptableObject, ISettingsContainer
     {
-        const string FOLDER_NAME = "Configs";
+        const string FolderName = "Configs";
 
         static Type genericInspectorType;
         static Type defaultSettingsEditorType;
@@ -48,7 +48,7 @@ namespace Pumkin.AvatarTools2.Settings
                             config = ownerAutoLoad.ConfigurationStrings.FirstOrDefault();
                     }
                     config = string.IsNullOrWhiteSpace(config) ? ConfigurationManager.DEFAULT_CONFIGURATION : config;
-                    _saveFolder = $"{SettingsManager.SettingsPath}{FOLDER_NAME}/{config}/";
+                    _saveFolder = $"{SettingsManager.SettingsPath}{FolderName}/{config}/";
                 }
                 return _saveFolder;
             }
@@ -88,9 +88,19 @@ namespace Pumkin.AvatarTools2.Settings
             if(defaultSettingsEditorType == null)
                 defaultSettingsEditorType = typeof(SettingsEditor);
 
+            Initialize();
+            
             SettingsManager.SaveSettingsCallback -= SettingsManager_SaveSettingsCallback;
             SettingsManager.SaveSettingsCallback += SettingsManager_SaveSettingsCallback;
             LoadFromConfigFile(SavePath);
+        }
+
+        /// <summary>
+        /// Use this to initialize stuff during Awake, before settings are loaded. Always call base.Initialize() before doing anything.
+        /// </summary>
+        protected virtual void Initialize()
+        {
+            
         }
 
         private void SettingsManager_SaveSettingsCallback()
@@ -100,7 +110,8 @@ namespace Pumkin.AvatarTools2.Settings
 
         public virtual void DrawUI()
         {
-            Editor?.OnInspectorGUI();
+            if(Editor)
+                Editor.OnInspectorGUI();
         }
 
         public bool SaveToConfigFile(string filePath)
@@ -114,7 +125,7 @@ namespace Pumkin.AvatarTools2.Settings
                     PumkinTools.LogVerbose($"Json for <b>{GetType().Name} is empty. Ignoring</b>");
                     return false;
                 }
-
+                
                 json = JSONHeader + '\n' + JsonUtility.ToJson(this, true);
                 File.WriteAllText(SavePath, json);
             }

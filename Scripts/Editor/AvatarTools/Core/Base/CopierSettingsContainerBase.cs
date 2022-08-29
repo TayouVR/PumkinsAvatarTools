@@ -1,6 +1,7 @@
 ﻿using Pumkin.Core;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -11,30 +12,65 @@ namespace Pumkin.AvatarTools2.Settings
     [Serializable]
     public abstract class CopierSettingsContainerBase : SettingsContainerBase
     {
-        protected virtual bool ShowRemoveAll { get; } = true;
-        protected virtual bool ShowCreateGameObjects { get; } = true;
-        protected virtual bool ShowOnlyAllowOne { get; } = false;
+        /// <summary>
+        /// Should we only allow one of this component type on each object?
+        /// </summary>
+        public virtual bool OnlyAllowOneComponentOfType => false;
+        
+        /// <summary>
+        /// Should we remove all components of this type before copying? Leave null to hide toggle
+        /// </summary>
+        public bool? RemoveAllBeforeCopying = false;
+        
+        /// <summary>
+        /// Should we create missing game objects? Leave null to hide toggle
+        /// </summary>
+        public bool? CreateGameObjects = true;
 
-        [ConditionalHide(nameof(ShowRemoveAll))]
-        public bool removeAllBeforeCopying = false;
-
-        [ConditionalHide(nameof(ShowCreateGameObjects))]
-        public bool createGameObjects = false;
-
-        [ConditionalHide(nameof(ShowOnlyAllowOne))]
-        public bool onlyAllowOneComponentOfType = false;
 
         public virtual PropertyDefinitions Properties { get; } = null;
+        public bool HasProperties { get; private set; }
 
-        // This needs to be here to put a space before the settings of the object that inherits us
-        [ConditionalHide(nameof(ShowCreateGameObjects), nameof(ShowRemoveAll))]
-        [SerializeField]UISpacer _spacer;
+        bool drawExtraFields = false;
+        bool hasFieldsInInspector = false;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            HasProperties = Properties != null;
+            drawExtraFields = RemoveAllBeforeCopying != null || CreateGameObjects != null;
+
+            if(drawExtraFields)
+            {
+                // Check for fields that are drawn in the inspector for spacing
+                foreach(var field in GetType().GetFields(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                {
+                    if((field.IsPrivate && field.GetCustomAttribute<SerializeField>() == null) ||
+                       (!field.IsPrivate && field.GetCustomAttribute<HideInInspector>() != null))
+                        continue;
+
+                    hasFieldsInInspector = true;
+                    break;
+                }
+            }
+        }
 
         public override void DrawUI()
         {
             base.DrawUI();
-            if(Properties != null)
+            if(HasProperties)
                 DrawPropertyGroups();
+
+            if(drawExtraFields)
+            {
+                if(HasProperties || hasFieldsInInspector)
+                    EditorGUILayout.Space();
+                
+                if(CreateGameObjects != null)
+                    CreateGameObjects = EditorGUILayout.ToggleLeft("Create Game Objects", (bool)CreateGameObjects);
+                if(RemoveAllBeforeCopying != null)
+                    RemoveAllBeforeCopying = EditorGUILayout.ToggleLeft("Remove All Before Copying", (bool)RemoveAllBeforeCopying);
+            }
         }
 
         void DrawPropertyGroups()

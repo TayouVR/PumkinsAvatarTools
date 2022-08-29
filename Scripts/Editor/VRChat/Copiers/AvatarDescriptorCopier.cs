@@ -15,7 +15,7 @@ namespace Pumkin.AvatarTools2.VRChat.Copiers
         public override string[] ComponentTypesFullNames => new string[]
         {
             VRChatTypes.VRC_AvatarDescriptor?.FullName,
-            VRChatTypes.PipelineManager?.FullName,
+            VRChatTypes.PipelineManager?.FullName
         };
 
         protected override GUIContent CreateGUIContent() =>

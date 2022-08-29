@@ -1,18 +1,26 @@
 {
     "name": "Pumkin.AvatarTools2.VRChat",
     "references": [
-        "Pumkin.AvatarTools2"
+        "GUID:87fb9ba67cf6c34448a70d5c8fcee8ac"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "VRCSDKBase.dll",
+        "VRCCore-Editor.dll",
+        "VRCSDKBase-Editor.dll",
+        "VRCSDK3Base-Editor.dll",
+        "VRCSDK3A.dll",
+        "VRC.Dynamics.dll",
+        "VRC.SDK3.Dynamics.PhysBone.dll",
+        "VRC.SDK3.Dynamics.Contact.dll"
+    ],
     "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_EDITOR",
-        "PUMKIN_VRC_SDK",
-        "!UDON"
-    ]
+        "VRC_SDK_VRCSDK3"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
